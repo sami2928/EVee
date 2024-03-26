@@ -270,7 +270,7 @@ const forgotPassword = async (req, res) => {
 
   await resetToken.save();
 
-  // Send Email with the Token to Reset Password
+  // Send Email with the Token to Forgot Password
 
   mailer.mailTransport().sendMail({
     from: process.env.MAIL_USERNAME,
@@ -304,7 +304,8 @@ const resetPassword = async (req, res) => {
 
   // Compare resetToken
   let isSamePassword = await bcryptjs.compare(password, user.password);
-  if (!isSamePassword) {
+
+  if (isSamePassword) {
     return helper.sendError(res, "New Password must be the different!");
   }
 
