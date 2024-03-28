@@ -61,7 +61,7 @@ const registerUser = async (req, res, next) => {
     });
 
     // Encrypt user password & OTP
-    const salt = await bcryptjs.genSalt(8);
+    const salt = await bcryptjs.genSalt(10);
     user.password = await bcryptjs.hash(password, salt);
     verificationToken.token = await bcryptjs.hash(
       verificationToken.token,
@@ -266,7 +266,8 @@ const forgotPassword = async (req, res) => {
     token: randomBytesToken,
   });
 
-  resetToken.token = await bcryptjs.hash(resetToken.token, 8);
+  const salt = await bcryptjs.genSalt(10);
+  resetToken.token = await bcryptjs.hash(resetToken.token, salt);
 
   await resetToken.save();
 
@@ -313,7 +314,10 @@ const resetPassword = async (req, res) => {
     return helper.sendError(res, "Password must be 8 to 20 characters long!");
   }
 
-  user.password = password.trim();
+  // Encrypt user password
+  const salt = await bcryptjs.genSalt(10);
+  user.password = await bcryptjs.hash(password.trim(), salt);
+
   await user.save();
 
   await ResetToken.findOneAndDelete({ owner: user._id });
