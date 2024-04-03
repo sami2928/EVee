@@ -344,6 +344,13 @@ const resetPassword = async (req, res) => {
   });
 };
 
+const verifyToken = async (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: "Token is valid.",
+  });
+};
+
 const generateQRCode = async (req, res, next) => {
   try {
     const { userId } = req.body;
@@ -474,6 +481,7 @@ module.exports = {
   getUser,
   forgotPassword,
   resetPassword,
+  verifyToken,
   generateQRCode,
   scanQRCode,
 };
