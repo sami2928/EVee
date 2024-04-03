@@ -24,6 +24,11 @@ router.post(
   middleware_user.isResetTokenValid,
   userController.resetPassword
 );
+router.get(
+  "/verify-token",
+  middleware_user.isResetTokenValid,
+  userController.verifyToken
+);
 router.post("/qr/generate", userController.generateQRCode);
 router.post("/qr/scan", user_jwt, userController.scanQRCode);
 
