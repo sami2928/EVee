@@ -3,10 +3,11 @@ const colors = require("colors");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-
+const cors = require("cors");
 const app = express();
 
 app.use(morgan("dev"));
+app.use(cors());
 
 // to store data
 app.use(express.json({}));
@@ -25,7 +26,7 @@ connectDB();
 
 app.use("/profile/auth", require("./routes/user"));
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 app.listen(
   PORT,
