@@ -278,7 +278,7 @@ const forgotPassword = async (req, res) => {
     to: user.email,
     subject: "Reset Password",
     html: mailer.generatePasswordResetTemplate(
-      `http://localhost:3000/reset-password?token=${randomBytesToken}&id=${user._id}`
+      `http://localhost:${process.env.PORT}/reset-password?token=${randomBytesToken}&id=${user._id}`
     ),
     function(error, info) {
       if (error) {
