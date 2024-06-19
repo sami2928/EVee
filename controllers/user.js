@@ -53,6 +53,10 @@ const registerUser = async (req, res, next) => {
     user.userName = userName;
     user.email = email;
 
+    // Generate QR Code for the user
+    const qrCodeImage = await helper.generateQRCode(user);
+    user.qrCodeImage = qrCodeImage;
+
     // generate OTP for email verification
     const OTP = mailer.generateOTP();
     const verificationToken = new VerificationToken({
@@ -278,7 +282,7 @@ const forgotPassword = async (req, res) => {
     to: user.email,
     subject: "Reset Password",
     html: mailer.generatePasswordResetTemplate(
-      `http://192.168.1.4:${process.env.PORT}/profile/auth/reset-password?token=${randomBytesToken}&id=${user._id}`
+      `http://192.168.1.8:${process.env.PORT}/profile/auth/reset-password?token=${randomBytesToken}&id=${user._id}`
     ),
     function(error, info) {
       if (error) {

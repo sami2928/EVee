@@ -23,6 +23,16 @@ const userSchema = new mongoose.Schema({
     default: "",
   },
 
+  qrCodeImage: {
+    type: String,
+    default: "",
+  },
+
+  is_admin: {
+    type: Boolean,
+    default: false,
+  },
+
   verified: {
     type: Boolean,
     default: false,
