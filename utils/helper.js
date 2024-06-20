@@ -1,6 +1,11 @@
 const crypto = require("crypto");
 const QR = require("qrcode");
 const jwt = require("jsonwebtoken");
+const { v4: uuidv4 } = require("uuid");
+const base58 = require("base-x")(
+  "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+); // Base58 encoding
+
 const sendError = (res, error, status = 400) => {
   res.status(status).json({
     success: false,
@@ -21,27 +26,17 @@ const createRandomBytes = () => {
   });
 };
 
-const generateQRCode = async (user) => {
+// Function to generate a 10-character unique identifier
+const generateShortUUID = () => {
+  const uuid = uuidv4();
+  const hash = crypto.createHash("sha256").update(uuid).digest("hex");
+  const shortId = base58.encode(Buffer.from(hash, "hex")).substring(0, 5); // Take the first 10 characters
+  return shortId;
+};
+
+const generateQRCode = async (userUUID) => {
   try {
-    const payload = {
-      user: {
-        id: user.id,
-        email: user.email,
-      },
-    };
-
-    const token = jwt.sign(payload, process.env.jwtUserSecret, {
-      expiresIn: 360000,
-    });
-
-    // Generate QR Code with a lower error correction level
-    const qrOptions = {
-      errorCorrectionLevel: "L", // L (Low), M (Medium), Q (Quartile), H (High)
-      type: "image/png",
-      width: 200, // Adjust size as needed
-    };
-
-    const dataImage = await QR.toDataURL(token, qrOptions);
+    const dataImage = await QR.toDataURL(userUUID);
     return dataImage;
   } catch (err) {
     console.log(err.message);
@@ -52,5 +47,6 @@ const generateQRCode = async (user) => {
 module.exports = {
   sendError,
   createRandomBytes,
+  generateShortUUID,
   generateQRCode,
 };

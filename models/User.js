@@ -28,6 +28,11 @@ const userSchema = new mongoose.Schema({
     default: "",
   },
 
+  qrCodeIdentifier: {
+    type: String,
+    unique: true,
+  },
+
   is_admin: {
     type: Boolean,
     default: false,

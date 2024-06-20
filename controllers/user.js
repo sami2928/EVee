@@ -49,13 +49,18 @@ const registerUser = async (req, res, next) => {
     }
 
     let user = new User();
+    const userUUID = helper.generateShortUUID();
+    console.log("\nuserUUID:", userUUID);
 
     user.userName = userName;
     user.email = email;
+    user.qrCodeIdentifier = userUUID;
+    console.log("\nqrCodeIdentifier:", user.qrCodeIdentifier);
 
     // Generate QR Code for the user
-    const qrCodeImage = await helper.generateQRCode(user);
+    const qrCodeImage = await helper.generateQRCode(userUUID);
     user.qrCodeImage = qrCodeImage;
+    console.log("\nqrCodeImage:", qrCodeImage);
 
     // generate OTP for email verification
     const OTP = mailer.generateOTP();
