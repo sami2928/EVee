@@ -47,8 +47,29 @@ const validate = async (req, res, next) => {
   sendError(res, err[0].msg);
 };
 
+const validateRegisterVehicle = [
+  // vehicleName validation
+  check("vehicleName")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("vehicleName is missing!")
+    .isLength({ min: 3, max: 20 })
+    .withMessage("vehicleName must be 3 to 20 characters long!"),
+
+  // vehicleModel validation
+  check("vehicleModel")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Vehicle Model is missing!")
+    .isLength({ min: 4, max: 4 })
+    .withMessage("Vehicle Model must be 4 numbers long!"),
+];
+
 module.exports = {
   validateRegisterUser,
   validateLoginUser,
   validate,
+  validateRegisterVehicle,
 };

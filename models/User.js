@@ -38,10 +38,39 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
 
+  is_subscribed: {
+    type: Boolean,
+    default: false,
+  },
+
   verified: {
     type: Boolean,
     default: false,
     required: true,
+  },
+
+  created_at: {
+    type: Date,
+    default: Date.now(),
+    required: true,
+  },
+
+  last_updated_at: {
+    type: Date,
+    default: Date.now(),
+    required: true,
+  },
+
+  admin_vehicles: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Vehicle",
+    },
+  ],
+
+  user_vehicle: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Vehicle",
   },
 });
 

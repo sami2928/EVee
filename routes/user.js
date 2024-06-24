@@ -4,7 +4,8 @@ const middleware_user = require("../middleware/user");
 const userController = require("../controllers/user");
 const validator = require("../middleware/validator");
 
-router.get("/", user_jwt, userController.getUser);
+router.get("/user", user_jwt, userController.getUser);
+router.get("/users", user_jwt, userController.getUsers);
 router.post(
   "/register",
   validator.validateRegisterUser,

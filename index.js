@@ -25,6 +25,7 @@ dotenv.config({
 connectDB();
 
 app.use("/profile/auth", require("./routes/user"));
+app.use("/vehicle", require("./routes/vehicle"));
 
 const PORT = process.env.PORT || 8000;
 

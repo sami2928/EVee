@@ -32,8 +32,30 @@ const getUser = async (req, res, next) => {
   }
 };
 
+const getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find().select("-password");
+
+    if (!users) {
+      return helper.sendError(
+        res,
+        "User not exists go & register to continue."
+      );
+    }
+
+    return res.status(200).json({
+      success: true,
+      users: users,
+    });
+  } catch (err) {
+    console.log(err.message);
+    helper.sendError(res, "Server Error.", 500);
+    next();
+  }
+};
+
 const registerUser = async (req, res, next) => {
-  const { userName, email, password } = req.body;
+  const { userName, email, password, is_admin, is_subscribed } = req.body;
 
   try {
     // Validate user input
@@ -50,17 +72,16 @@ const registerUser = async (req, res, next) => {
 
     let user = new User();
     const userUUID = helper.generateShortUUID();
-    console.log("\nuserUUID:", userUUID);
 
     user.userName = userName;
     user.email = email;
+    user.is_admin = is_admin;
+    user.is_subscribed = is_subscribed;
     user.qrCodeIdentifier = userUUID;
-    console.log("\nqrCodeIdentifier:", user.qrCodeIdentifier);
 
     // Generate QR Code for the user
     const qrCodeImage = await helper.generateQRCode(userUUID);
     user.qrCodeImage = qrCodeImage;
-    console.log("\nqrCodeImage:", qrCodeImage);
 
     // generate OTP for email verification
     const OTP = mailer.generateOTP();
@@ -488,6 +509,7 @@ module.exports = {
   verifyEmail,
   loginUser,
   getUser,
+  getUsers,
   forgotPassword,
   resetPassword,
   verifyToken,
